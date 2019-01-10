@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="cn.tedu.store.mapper.DistrictMapper"  >
+<!-- 根据执行的SQL种类选择节点 -->
+<!-- id是抽象方法的名称 -->
+<!--parameterType是：抽象方法的参数类型  -->
+<!-- SQL语句结束不需要分号 -->
+<!--useGeneratedKeys="true" 获取自增长的建
+ keyProperty="id"  表示建的属性名，即对应类中的属性名 -->
+
+
+
+<!--/**
+    * 根据城市代号查城市中文名
+    * @param parent   城市的代号
+    * @return        城市的中文名字集合
+    */
+   List<District> findByParent(String parent);  -->
+<select id="findByParent" resultType="cn.tedu.store.entity.District">
+SELECT 
+id,parent,code,name
+FROM
+t_dict_district
+WHERE PARENT = #{parent}
+ORDER BY CODE
+
+</select>
+
+
+
+<!-- /**
+	 * 根据code查询中文名字
+	 * @param code
+	 * @return   返回district
+	 */
+	District findByCode(String code); -->
+<select id="findByCode" resultType="cn.tedu.store.entity.District">
+SELECT 
+id,parent,code,name
+FROM
+t_dict_district
+WHERE code = #{code}
+<!-- order by 和 limit -->
+</select>
+
+</mapper>

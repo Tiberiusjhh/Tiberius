@@ -52,6 +52,8 @@ public class UserServiceImpl implements IUserservice {
 			user.setCreatedTime(date);
 			user.setModifiedUser(user.getUsername());
 			user.setModifiedTime(date);
+			
+			//给出默认头像地址
 			user.setAvatar("/upload/1546847702421836569.png");
 			
 			//是，用户名不存在，执行注册，返回注册对象

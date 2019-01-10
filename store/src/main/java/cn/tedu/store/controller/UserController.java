@@ -1,5 +1,7 @@
 package cn.tedu.store.controller;
-
+/**
+ * 用户注册、登录、修改头像等、控制器
+ */
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;

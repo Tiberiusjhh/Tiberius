@@ -20,6 +20,8 @@ public class WebAppConfigurer implements WebMvcConfigurer {
 		List<String> paht= new ArrayList<String>();
 		paht.add("/user/**");
 		paht.add("/web/**");
+		paht.add("/address/**");
+		paht.add("/district/**");
 		
 		List<String>  ex = new ArrayList<String>();
 		ex.add("/user/reg.do");

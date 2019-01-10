@@ -1,5 +1,7 @@
 package cn.tedu.store.mapper;
-
+/**
+ * 用户映射接口
+ */
 import java.util.Date;
 import java.util.List;
 

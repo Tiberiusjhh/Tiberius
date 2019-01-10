@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="cn.tedu.store.mapper.AddressMapper"  >
+<!-- 根据执行的SQL种类选择节点 -->
+<!-- id是抽象方法的名称 -->
+<!--parameterType是：抽象方法的参数类型  -->
+<!-- SQL语句结束不需要分号 -->
+<!--useGeneratedKeys="true" 获取自增长的建
+ keyProperty="id"  表示建的属性名，即对应类中的属性名 -->
+ 
+ <!-- 根据用户uid统计表中的数据 -->
+<!-- Integer getCountByUid(Integer uid); -->
+ <select id="getCountByUid"  resultType="java.lang.Integer">
+ SELECT COUNT(ID)
+ FROM t_address 
+ WHERE UID = #{uid}
+ 
+ </select>
+ 
+ 
+ 
+ 
+ 
+ <!-- 插入数据 -->
+ <!--Integer addnew(Address address); -->
+<insert id="addnew" parameterType="cn.tedu.store.entity.Address" useGeneratedKeys="true" keyProperty="id">
+INSERT INTO t_address (
+uid,name,province,city,
+area,district,tel,
+zip,address,phone,tag,is_default,
+created_user,created_time,
+modified_user,modified_time 
+) VALUES(
+#{uid},#{name},#{province},#{city},#{area},
+#{district},#{tel},#{zip},#{address},
+#{phone},#{tag},#{isDefault},
+#{createdUser},#{createdTime},
+#{modifiedUser},#{modifiedTime}
+)
+</insert>
+
+<!--/**
+    * 根据用户id查询地址
+    * @param uid   用户id
+    * @return      地址信息类
+    */
+   public  List<Address> findByUidAddresse(Integer uid);  -->
+<select id="findByUidAddresse" resultType="cn.tedu.store.entity.Address">
+SELECT 
+id,name,phone,district,address,tag,is_default as isDefault
+from t_address
+where uid = #{uid}
+order by is_default desc,
+modified_time desc
+
+</select>
+
+
+
+  <!-- public  Address findById(Integer id);  -->
+<select id="findById" resultType="cn.tedu.store.entity.Address">
+SELECT 
+id,uid,name
+From t_address
+where id=#{id}
+
+
+</select>
+
+  <!-- public  Address findLastmodified(Integer uid);  -->
+<select id="findLastmodified" resultType="cn.tedu.store.entity.Address">
+SELECT 
+id,name
+From t_address
+where uid = #{uid}
+order by modified_time desc
+limit 0,1
+
+</select>
+
+
+
+
+<!--public Integer addressDeleteById(Integer id); -->
+<delete id="addressDeleteById">
+DELETE FROM t_address
+where id=#{id}
+</delete>
+
+
+
+
+<!--  
+   /**
+    * 
+    * 根据uid更改默认地址的属性全部为0
+    * @param uid    用户的uid
+    * @return   返回受到影响的行数大于0
+    */  -->
+<!-- public Integer updateNonDefalutByUid(Integer uid); -->
+<update id="updateNonDefalutByUid">
+UPDATE t_address SET 
+is_default=0 
+WHERE
+uid = #{uid}
+</update>
+
+
+
+<!-- /**
+    * 根据id更改默认地址的属性为1
+    * @param id   id
+    * @return    等于1
+    */ -->
+<!-- public Integer updateDefalutById(Integer id); -->
+<update id="updateDefalutById">
+UPDATE t_address SET 
+is_default=1 
+WHERE
+id = #{id}
+</update>
+
+
+</mapper>
