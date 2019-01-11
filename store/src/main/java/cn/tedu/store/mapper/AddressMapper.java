@@ -1,7 +1,7 @@
 package cn.tedu.store.mapper;
 
+import java.util.Date;
 import java.util.List;
-
 import cn.tedu.store.entity.Address;
 
 /**
@@ -62,7 +62,7 @@ public interface AddressMapper {
 	    * @param id   id
 	    * @return    等于1
 	    */
-	   public Integer updateDefalutById(Integer id);
+	   public Integer updateDefalutById(Integer id,String modifiedUser,Date modifiedTime);
 	   
 	   //根据id查地址
 	   public  Address findById(Integer id);

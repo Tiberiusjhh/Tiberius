@@ -28,6 +28,8 @@ public class WebAppConfigurer implements WebMvcConfigurer {
 		ex.add("/web/reg.html");		
 		ex.add("/user/login.do");
 		ex.add("/web/login.html");
+		ex.add("/web/index.html");
+		ex.add("/web/product.html");
 		
 		registry.addInterceptor(new LoginInterceptor())
 		.addPathPatterns(paht)

@@ -35,6 +35,7 @@ public class AddressController extends BaseController{
 	@PostMapping("/create")
 	public ResponseResult<Void> addressNew(HttpSession session,Address address) {
 		//获取用户名
+		System.out.println("用户资料"+address);
 		String username  =  session.getAttribute("username").toString();
 		//获取用户uid
 		Integer uid = getUidFromSession(session);
@@ -57,29 +58,43 @@ public class AddressController extends BaseController{
 		return new ResponseResult<List<Address>>(SUCCESS,findByUidAddresses);
 	}
 	
+	
+	
+	
 	/**
-	 * 地址删除
+	 * 修改默认地址
 	 * @param session
+	 * @param id
 	 * @return
 	 */
-	@PostMapping("/addressDelete")
-	public ResponseResult<Void> addressDeleteById(HttpSession session){
-		
-		System.out.println(session.getId());
-		return new ResponseResult<Void>(SUCCESS);
-	}
-	
-	
-	
-	
-	
 	@GetMapping("/addressDefault/{id}")
 	public ResponseResult<Void> setAddressDefault(HttpSession session,@PathVariable("id")Integer id){
 		Integer uid = getUidFromSession(session);
-		iAddressService.updateDefalutById(uid, id);
+		String modifiedUser = session.getAttribute("username").toString();
+		System.out.println("modifiedUser"+modifiedUser);
+		iAddressService.updateDefalutById(uid, id,modifiedUser);
 		
 		System.out.println("处理地址"+id);
 		return new ResponseResult<Void>(SUCCESS);
 	}
+	
+	
+	
+	/**
+	 * 删除收货地址
+	 * @param session
+	 * @param id
+	 * @return
+	 */
+	@GetMapping("/DeleteAddressDefault/{id}")
+	public ResponseResult<Void>DeleteAddressDefault(HttpSession session,@PathVariable("id")Integer id){
+		Integer uid = getUidFromSession(session);
+		String modifiedUser = session.getAttribute("username").toString();
+		System.out.println("modifiedUser"+id+":"+uid+":"+modifiedUser);
+		iAddressService.addressDeleteById(uid, id, modifiedUser);	
+		System.out.println("删除收货地址"+id);
+		return new ResponseResult<Void>(SUCCESS);
+	}
+	
 	
 }

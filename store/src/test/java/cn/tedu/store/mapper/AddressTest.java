@@ -84,13 +84,16 @@ public class AddressTest {
 	
 	@Test
 	public void updabyid() {
-		Integer updateDefalutById = addressMapper.updateDefalutById(1);
+		Integer id = 2;
+		String modifiedUser ="testUser";
+		Date  modifiedTime = new Date();
+		Integer updateDefalutById = addressMapper.updateDefalutById(id, modifiedUser, modifiedTime);
 		System.out.println(updateDefalutById);
 	}
 	
 	@Test
 	public void fiddddbyid() {
-		Integer id = 2;
+		Integer id = 3;
 		Address findById = addressMapper.findById(id);
 		System.out.println(findById);
 	}

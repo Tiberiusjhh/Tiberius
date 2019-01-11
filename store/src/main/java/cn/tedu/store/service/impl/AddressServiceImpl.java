@@ -3,11 +3,9 @@ package cn.tedu.store.service.impl;
 
 import java.util.Date;
 import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import cn.tedu.store.entity.Address;
 import cn.tedu.store.entity.District;
 import cn.tedu.store.mapper.AddressMapper;
@@ -15,6 +13,7 @@ import cn.tedu.store.service.IAddressService;
 import cn.tedu.store.service.IDistrictService;
 import cn.tedu.store.service.exception.AccessDeniedException;
 import cn.tedu.store.service.exception.AddressNotFoundException;
+import cn.tedu.store.service.exception.DeleteException;
 import cn.tedu.store.service.exception.InsertException;
 import cn.tedu.store.service.exception.UpdateException;
 import cn.tedu.store.service.exception.UserNotFoundException;
@@ -68,6 +67,62 @@ public class AddressServiceImpl implements IAddressService{
 	
 	
 	/**
+	 * 根据id修改相关默认地址
+	 * @Transactional  事务注解
+	 */
+	@Override
+	@Transactional
+	public void updateDefalutById(Integer uid,Integer id,String modifiedUser) {
+		
+		Address findByIdfor = findById(id);
+		
+		if (findByIdfor == null) {
+			throw new AddressNotFoundException("设置默认收货地址失败，尝试访问的收货地址不存在");
+		}
+		
+		if (findByIdfor.getUid() !=uid ) {
+		
+				throw new AccessDeniedException("设置默认收货地址失败，访问权限出错");
+			
+		}
+		Date modifiedTime = new Date();
+		updateAddresByUid(uid);
+		updateDefultAddresById(id, modifiedUser, modifiedTime);
+	}
+	
+	
+	
+	
+	@Override
+	@Transactional
+	public void addressDeleteById(Integer uid, Integer id,String modifiedUser) throws DeleteException {
+		//根据id查询地址
+		Address findById = findById(id);
+		if (findById == null) {
+			throw new AddressNotFoundException("删除地址失败!尝试删除的地址不存在");
+		}
+		
+		if (findById.getUid() != uid) {
+			throw new AddressNotFoundException("删除地址失败!用户权限不匹配");
+		}
+		
+		//删除该id的地址
+		addressDelete(id);			
+		//查询该用户是否还有地址
+		if (getCountByUid(uid) >0) {	
+			if (findById.getIsDefault() == 1) {
+				Integer lastid = findLastmodified(uid).getId();
+				updateDefalutById(uid, lastid, modifiedUser);
+			}
+			//
+		}
+		
+		
+	}
+
+	
+	
+	/**
 	 * 根据省、市、区的代号获取名称
 	 * @param province   省的代号
 	 * @param city    市的代号
@@ -104,34 +159,6 @@ public class AddressServiceImpl implements IAddressService{
 		
 		return provinceName+" "+cityName+" "+areaName;
 	}
-	
-	
-	
-	/**
-	 * 根据id修改相关默认地址
-	 * @Transactional  事务注解
-	 */
-	@Override
-	@Transactional
-	public void updateDefalutById(Integer uid,Integer id) {
-		
-		Address findById = findById(id);
-		
-		
-		if (findById == null) {
-			throw new AddressNotFoundException("设置默认收货地址失败，尝试访问的收货地址不存在");
-		}
-		
-		if (findById.getUid() !=uid ) {
-		
-				throw new AccessDeniedException("设置默认收货地址失败，访问权限出错");
-			
-		}
-		
-		updateAddresByUid(uid);
-		updateDefultAddresById(id);
-	}
-
 	
 	
 
@@ -171,8 +198,8 @@ public class AddressServiceImpl implements IAddressService{
 	 */
 	private void addressDelete(Integer id) {
 		Integer addressDeleteById = addressMapper.addressDeleteById(id);
-		if (addressDeleteById == 0) {
-			
+		if (addressDeleteById != 1) {
+			throw new DeleteException("删除地址时发生未知错误!请重新登录尝试!");
 		}
 	}
 
@@ -194,8 +221,8 @@ public class AddressServiceImpl implements IAddressService{
 	 * @param id
 	 * @return
 	 */
-	private void updateDefultAddresById(Integer id) {
-		Integer updateDefalutById = addressMapper.updateDefalutById(id);
+	private void updateDefultAddresById(Integer id,String modifiedUser,Date modifiedTime) {
+		Integer updateDefalutById = addressMapper.updateDefalutById(id,modifiedUser,modifiedTime);
 		if (updateDefalutById != 1) {
 			throw new UpdateException("发生错误！更新发生未知错误！");
 		}
@@ -203,16 +230,24 @@ public class AddressServiceImpl implements IAddressService{
 	
 	
 	
-	@Override
-	public void addressDeleteById(Integer id) {
-		// TODO Auto-generated method stub
-		
-	}
-
+	/**
+	 * 根据id查询即将删除的地址
+	 * @param id
+	 * @return
+	 */
 	 private  Address findById(Integer id) {
 		return addressMapper.findById(id);
 	 }
-	
+
+
+	 /**
+	  * 根据用户uid查询到地址的第一条信息
+	  * @param uid
+	  * @return
+	  */
+	 private  Address findLastmodified(Integer uid) {
+			return addressMapper.findLastmodified(uid);
+		 }
 	
 	
 	

@@ -7,14 +7,13 @@ package cn.tedu.store.controller;
  *
  */
 
-import java.nio.file.AccessDeniedException;
-
 import javax.servlet.http.HttpSession;
-
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import cn.tedu.store.service.exception.AccessDeniedException;
 import cn.tedu.store.service.exception.AddressNotFoundException;
+import cn.tedu.store.service.exception.DeleteException;
 import cn.tedu.store.service.exception.DuplicateKeyException;
 import cn.tedu.store.service.exception.FileEmptyException;
 import cn.tedu.store.service.exception.FileSizeOutOfLimitException;
@@ -71,10 +70,15 @@ public abstract class BaseController {
 			//文件上传异常
 			state = 603;
 		}else if ( e instanceof AddressNotFoundException) {
+			//收货地址没有找到
 			state = 700;
 		}else if (e instanceof AccessDeniedException) {
+			//默认地址权限不匹配
 			state = 701;
-		} 
+		}else if (e instanceof DeleteException ) {
+			//删除收货地址异常
+			state = 702;
+		}
 				
 		return new ResponseResult<Void>(state,e);
 

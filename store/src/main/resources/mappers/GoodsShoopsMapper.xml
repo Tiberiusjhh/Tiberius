@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="cn.tedu.store.mapper.GoodsShoopsMapper"  >
+<!-- 根据执行的SQL种类选择节点 -->
+<!-- id是抽象方法的名称 -->
+<!--parameterType是：抽象方法的参数类型  -->
+<!-- SQL语句结束不需要分号 -->
+<!--useGeneratedKeys="true" 获取自增长的建
+ keyProperty="id"  表示建的属性名，即对应类中的属性名 -->
+ 
+ <!-- 根据用户uid统计表中的数据
+  -->
+<!-- list<GoodsShoops> getListGoodsShoops(); -->
+ <select id="getListGoodsShoops"  resultType="cn.tedu.store.entity.GoodsShoops">
+ SELECT 
+id,parent_id As parentId,
+name,status,sort_order AS sortOrder,
+is_parent AS isParent,
+created_user createdUser,
+created_time createdTime,
+modified_user modifiedUser,
+modified_time modifiedTime
+ FROM t_goods_category
+ 
+ </select>
+ 
+ 
+ 
+ <!-- 根据父级id统计表中子类的商品分类的数据
+  -->
+<!-- list<GoodsShoops> getParenetIDListShoops(Integer parentId); -->
+ <select id="getParenetIDListShoops"  resultType="cn.tedu.store.entity.GoodsShoops">
+ SELECT 
+id,name
+ FROM t_goods_category
+ WHERE parent_id=#{parentId}
+ order by sort_order  desc
+ </select>
+ 
+ 
+ 
+ 
+
+</mapper>

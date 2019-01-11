@@ -63,11 +63,9 @@ modified_time desc
   <!-- public  Address findById(Integer id);  -->
 <select id="findById" resultType="cn.tedu.store.entity.Address">
 SELECT 
-id,uid,name
+id,uid,name,is_default As isDefault
 From t_address
 where id=#{id}
-
-
 </select>
 
   <!-- public  Address findLastmodified(Integer uid);  -->
@@ -115,10 +113,10 @@ uid = #{uid}
     * @param id   id
     * @return    等于1
     */ -->
-<!-- public Integer updateDefalutById(Integer id); -->
+<!-- public Integer updateDefalutById(Integer id,String modifiedUser,Data modifiedTime); -->
 <update id="updateDefalutById">
 UPDATE t_address SET 
-is_default=1 
+is_default=1,modified_user=#{modifiedUser},modified_Time=#{modifiedTime}
 WHERE
 id = #{id}
 </update>

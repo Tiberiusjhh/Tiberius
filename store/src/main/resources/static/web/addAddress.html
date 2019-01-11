@@ -458,10 +458,6 @@
 				alert("区不能为空");
 				return;
 			}
-			if($("#province").val == null){
-				alert("省不能为空");
-				return;
-			}
 			
 			
 			
@@ -482,7 +478,7 @@
 				}
 			},
 			"error":function(xhr,text,errorThrown){
-				alert(xhr.status+":"+xhr.readyState);
+				console.log(xhr.status+":"+xhr.readyState);
 				location.href= "addAddress.html"; 
 			}
 				

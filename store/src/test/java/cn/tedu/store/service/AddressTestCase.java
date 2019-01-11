@@ -55,7 +55,19 @@ public class AddressTestCase {
 	public void updateAddress() {
 		Integer uid =9;
 		Integer id = 1;
-		iAddressService.updateDefalutById(uid, id);
+		String modifiedUser = "testUser";
+		iAddressService.updateDefalutById(uid, id, modifiedUser);
 		System.out.println("结束");
 	}
+	
+	@Test
+	public void delteAddress() {
+		Integer uid =9;
+		Integer id = 1;
+		String modifiedUser = "testUser";
+		iAddressService.addressDeleteById(uid, id, modifiedUser);
+		System.out.println("结束");
+	}
+	
+	
 }

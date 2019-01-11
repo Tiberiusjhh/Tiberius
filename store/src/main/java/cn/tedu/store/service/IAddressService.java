@@ -3,6 +3,7 @@ package cn.tedu.store.service;
 import java.util.List;
 
 import cn.tedu.store.entity.Address;
+import cn.tedu.store.service.exception.DeleteException;
 import cn.tedu.store.service.exception.InsertException;
 import cn.tedu.store.service.exception.UpdateException;
 import cn.tedu.store.service.exception.UserNotFoundException;
@@ -32,13 +33,6 @@ public interface IAddressService {
    public List<Address> findByUidAddresses(Integer uid) ;
    
    
-   /**
-    * 根据id删除地址信息
-    * @param id    网页中带有的数据
-    * 成功返回200   失败抛出异常
-    */
-   public void addressDeleteById(Integer id) ;
-   
    
    /**
     * 
@@ -54,6 +48,19 @@ public interface IAddressService {
     * @param id   id
     * @return    等于1
     */
-   public void updateDefalutById(Integer uid,Integer id) throws UpdateException;
+   public void updateDefalutById(Integer uid,Integer id,String modifiedUser) throws UpdateException;
+   
+   
+
+   /**
+    * 根据id删除 收货地址信息
+    * @param uid    收货地址的归属用户id
+    * @param id      收货地主id
+    * @param modifiedUser   修改用户
+    * @throws DeleteException    删除异常的类
+    */
+   public void addressDeleteById(Integer uid,Integer id,String modifiedUser) throws DeleteException;
+   
+   
    
 }

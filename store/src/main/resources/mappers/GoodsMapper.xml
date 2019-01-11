@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"      
+ "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<mapper namespace="cn.tedu.store.mapper.GoodsMapper"  >
+<!-- 根据执行的SQL种类选择节点 -->
+<!-- id是抽象方法的名称 -->
+<!--parameterType是：抽象方法的参数类型  -->
+<!-- SQL语句结束不需要分号 -->
+<!--useGeneratedKeys="true" 获取自增长的建
+ keyProperty="id"  表示建的属性名，即对应类中的属性名 -->
+ 
+ <!--/**
+	 * 查询goods表的内容
+	 * @return  返回goods的集合
+	 */ -->
+<!--public List<Goods> getListGoods();
+-->
+ <select id="getListGoods"  resultType="cn.tedu.store.entity.Goods">
+ SELECT 
+id,category_id AS categoryId,price,
+num,barcode,image,status,priority,
+created_user createdUser,
+created_time createdTime,
+modified_user modifiedUser,
+modified_time modifiedTime
+ FROM t_goods
+ 
+ </select>
+ 
+ <!-- 根据id统计表中子类的商品分类的数据
+  -->
+<!-- list<Goods> getgoodListShoops(Integer categoryId); -->
+ <select id="getgoodListShoops"  resultType="cn.tedu.store.entity.Goods">
+ SELECT 
+id,title,sell_point AS sellPoint,
+price,image
+ FROM t_goods
+ WHERE category_id=#{categoryId}
+ order by priority  desc
+ limit #{offset},#{count}
+ </select>
+ 
+ <!--/**
+	 * 根据商品id返回商品信息
+	 * @param id
+	 * @return
+	 */
+	public Goods findById(long id);  -->
+ 
+ <select id="findById"  resultType="cn.tedu.store.entity.Goods">
+ SELECT 
+id,category_id as categoryId,
+item_type as itemType,title,sell_point AS sellPoint,
+price,num,barcode,image,status,priority,
+created_user createdUser,
+created_time createdTime,
+modified_user modifiedUser,
+modified_time modifiedTime
+ FROM t_goods
+ WHERE id=#{id}
+ </select>
+ 
+ <!-- 热销榜的数据
+  -->
+<!-- List<Goods> findByPriority(Integer count); -->
+ <select id="findByPriority"  resultType="cn.tedu.store.entity.Goods">
+ SELECT 
+id,title,price,image
+ FROM t_goods
+ WHERE status = 1 AND num>0
+ order by priority  desc
+ limit 0,#{count}
+ </select>
+ 
+</mapper>

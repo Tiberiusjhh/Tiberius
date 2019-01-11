@@ -1,6 +1,6 @@
 package cn.tedu.store.service.exception;
 /**
- * 默认地址权限
+ * 默认地址权限不匹配
  * @author Tiberius
  *
  */
